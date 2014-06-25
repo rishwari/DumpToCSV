@@ -57,8 +57,13 @@ $first = (array) $first;
 $keys = array_keys($first);
 fputcsv($fh, $keys, ",", "\"");
 foreach($decoded->results as $result){
-	$result = (array) $result;	
-	fputcsv($fh, $result, ",", "\"");
+     $result = (array) $result;
+     foreach($result as $key => $value) {  //Building the CSV was dropping some values because json_decode sucks at null
+     	if (empty($value)) {
+     		$result[$key] = '';
+     	}
+     }
+     fputcsv($fh, $result, ",", "\"");
 }
 
 fclose($fh);
