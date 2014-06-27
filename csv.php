@@ -54,10 +54,12 @@ $decoded = curlWrap("/exports/tickets/sample.json?start_time=1332034771"/*.$time
  
 $first = $decoded->results[0];
 $first = (array) $first;
+ksort($first);  // The original JSON object cares nothing for order of objects/props. Also jumble making
 $keys = array_keys($first);
 fputcsv($fh, $keys, ",", "\"");
 foreach($decoded->results as $result){
      $result = (array) $result;
+     ksort($result);	//see note from line 57	
      foreach($result as $key => $value) {  //Building the CSV was dropping some values because json_decode sucks at null
      	if (empty($value)) {
      		$result[$key] = '';
